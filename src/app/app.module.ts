@@ -11,6 +11,8 @@ import { LoginButtonComponent } from './components/login-button/login-button.com
 import { LogoutButtonComponent } from './components/logout-button/logout-button.component';
 import { AuthenticationButtonComponent } from './components/authentication-button/authentication-button.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { BoardComponent } from './components/board/board.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 const appRoutes: Routes = [{ path: '', component: HomeComponent }];
 
@@ -22,6 +24,8 @@ const appRoutes: Routes = [{ path: '', component: HomeComponent }];
     LogoutButtonComponent,
     AuthenticationButtonComponent,
     UserProfileComponent,
+    BoardComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
