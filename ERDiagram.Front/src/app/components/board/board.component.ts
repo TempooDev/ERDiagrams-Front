@@ -1,17 +1,18 @@
 import { Component, Input, IterableDiffers, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import * as go from 'gojs'
-import {  } from 'gojs-angular'
+import { } from 'gojs-angular'
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit{
-  nodeDataArray:Array<EntityDB> = [];
+export class BoardComponent implements OnInit {
 
-  linkDataArray:Array<RelationShip> = [];
+  nodeDataArray: Array<EntityDB> = [];
 
-   colors = {
+  linkDataArray: Array<RelationShip> = [];
+
+  colors = {
     'red': '#be4b15',
     'green': '#52ce60',
     'blue': '#6ea5f8',
@@ -22,18 +23,18 @@ export class BoardComponent implements OnInit{
     'purple': '#d689ff',
     'orange': '#fdb400',
   }
-  myDiagram: go.Diagram = new  go.Diagram;
+  myDiagram: go.Diagram = new go.Diagram;
 
   ngOnInit() {
 
     const $ = go.GraphObject.make;
     this.myDiagram = $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
-    {
-      allowDelete: false,
-      allowCopy: false,
-      layout: $(go.ForceDirectedLayout),
-      "undoManager.isEnabled": false
-    });
+      {
+        allowDelete: false,
+        allowCopy: false,
+        layout: $(go.ForceDirectedLayout),
+        "undoManager.isEnabled": true
+      });
 
 
 
@@ -41,7 +42,7 @@ export class BoardComponent implements OnInit{
     var itemTempl =
       $(go.Panel, "Horizontal",
         $(go.Shape,
-          { desiredSize: new go.Size(15, 15), strokeJoin: "round", strokeWidth: 3, stroke: null, margin: 2 },
+          { desiredSize: new go.Size(15, 15), strokeJoin: "round", strokeWidth: 1, stroke: null, margin: 2 },
           new go.Binding("figure", "figure"),
           new go.Binding("fill", "color"),
           new go.Binding("stroke", "color")),
@@ -71,7 +72,7 @@ export class BoardComponent implements OnInit{
         new go.Binding("desiredSize", "visible", v => new go.Size(NaN, NaN)).ofObject("LIST"),
         // define the node's outer shape, which will surround the Table
         $(go.Shape, "RoundedRectangle",
-          { fill: 'white', stroke: "#eeeeee", strokeWidth: 3 }),
+          { fill: 'white', stroke: "#eeeeee", strokeWidth: 1 }),
         $(go.Panel, "Table",
           { margin: 8, stretch: go.GraphObject.Fill },
           $(go.RowColumnDefinition, { row: 0, sizing: go.RowColumnDefinition.None }),
@@ -144,8 +145,9 @@ export class BoardComponent implements OnInit{
         nodeDataArray: this.nodeDataArray,
         linkDataArray: this.linkDataArray
       });
+    this.createExample();
   }
-  ngOnChanges(changes:SimpleChanges):void{
+  ngOnChanges(changes: SimpleChanges): void {
 
   }
 
@@ -183,62 +185,89 @@ export class BoardComponent implements OnInit{
       },
     ];
 
-     this.linkDataArray =  [
-      { key:-1,from: "Products", to: "Vendedores", text: "0..N", toText: "1" },
-      { key:-2, from: "Products", to: "Categories", text: "0..N", toText: "1" },
-      { key:-3,from: "Order Details", to: "Products", text: "0..N", toText: "1" }
+    this.linkDataArray = [
+      { key: -1, from: "Products", to: "Vendedores", text: "0..N", toText: "1" },
+      { key: -2, from: "Products", to: "Categories", text: "0..N", toText: "1" },
+      { key: -3, from: "Order Details", to: "Products", text: "0..N", toText: "1" }
     ];
 
-      // Actualizar datos de nodos
-      this.nodeDataArray.forEach(nodeData => {
-        var node = this.myDiagram.model.findNodeDataForKey(nodeData.key);
-        if (node !== null) {
-          this.myDiagram.model.setDataProperty(node, "items", nodeData.items);
-        }
-      });
+    // Actualizar datos de nodos
+    this.nodeDataArray.forEach(nodeData => {
+      var node = this.myDiagram.model.findNodeDataForKey(nodeData.key);
+      if (node !== null) {
+        this.myDiagram.model.setDataProperty(node, "items", nodeData.items);
+      }
+    });
 
-      // Actualizar datos de enlaces
-      this.linkDataArray.forEach(linkData => {
-        var link = this.myDiagram.model.findNodeDataForKey(linkData.key);
-        if (link !== null) {
-          this.myDiagram.model.setDataProperty(link, "from", linkData.from);
-          this.myDiagram.model.setDataProperty(link, "to", linkData.to);
-          this.myDiagram.model.setDataProperty(link, "text", linkData.text);
-          this.myDiagram.model.setDataProperty(link, "toText", linkData.toText);
-        }
-      });
+    // Actualizar datos de enlaces
+    this.linkDataArray.forEach(linkData => {
+      var link = this.myDiagram.model.findNodeDataForKey(linkData.key);
+      if (link !== null) {
+        this.myDiagram.model.setDataProperty(link, "from", linkData.from);
+        this.myDiagram.model.setDataProperty(link, "to", linkData.to);
+        this.myDiagram.model.setDataProperty(link, "text", linkData.text);
+        this.myDiagram.model.setDataProperty(link, "toText", linkData.toText);
+      }
+    });
 
-      // Asignar el modelo actualizado al diagrama
-      this.myDiagram.model = new go.GraphLinksModel({
-        copiesArrays: true,
-        copiesArrayObjects: true,
-        nodeDataArray: this.nodeDataArray,
-        linkDataArray: this.linkDataArray
-      });
+    // Asignar el modelo actualizado al diagrama
+    this.myDiagram.model = new go.GraphLinksModel({
+      copiesArrays: true,
+      copiesArrayObjects: true,
+      nodeDataArray: this.nodeDataArray,
+      linkDataArray: this.linkDataArray
+    });
+
+  }
+
+  createEntity() {
+    let entity: EntityDB = {
+      key: "Tienda",
+      items: [
+        {
+          name: "TiendaId",
+          iskey: true,
+          figure: "",
+          color: this.colors.blue
+        }
+      ]
     }
+    this.myDiagram.model.addNodeData(entity);
+
+    //test addLink
+    let relationship: RelationShip = {
+      key: -4,
+      from: "Tienda",
+      to: "Productos",
+      toText: "1",
+      text: "1"
+    }
+    this.addLink(relationship)
+  }
+  addLink(relationship: RelationShip): void {
+
+  }
 
 }
 
 interface RelationShip {
-  key:number
-  from:string
-  to:string
+  key: number
+  from: string
+  to: string
   text: string
   toText: string
 }
 
 interface EntityDB {
-  key:string
+  key: string
   items: Array<Features>
 }
 
 interface Features {
-  name:string
-  iskey:boolean
+  name: string
+  iskey: boolean
   figure: string
-  color:string
+  color: string
 }
-function signal(arg0: never[]): EntityDB[] {
-  throw new Error('Function not implemented.');
-}
+
 
