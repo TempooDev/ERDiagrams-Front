@@ -1,454 +1,231 @@
 import {
+  ChangeDetectorRef,
   Component,
-  Input,
-  IterableDiffers,
   OnInit,
-  SimpleChange,
   SimpleChanges,
+  ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import * as go from 'gojs';
-import { } from 'gojs-angular';
+import { DiagramComponent, PaletteComponent } from 'gojs-angular';
+import { EntityDB } from 'src/app/entities/entitydb';
+import { RelationShip } from 'src/app/entities/relationship';
+import { BoardService } from 'src/app/services/board.service';
+import { Colors } from 'src/app/utils/colors';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
-export class BoardComponent implements OnInit {
-  nodeDataArray: Array<EntityDB> = [];
+export class BoardComponent {
 
-  linkDataArray: Array<RelationShip> = [];
+  // @ViewChild('myDiagram', { static: true }) public myDiagramComponent: DiagramComponent;
+  // @ViewChild('myPalette', { static: true }) public myPaletteComponent: PaletteComponent;
 
-  colors = {
-    red: '#be4b15',
-    green: '#52ce60',
-    blue: '#6ea5f8',
-    lightred: '#fd8852',
-    lightblue: '#afd4fe',
-    lightgreen: '#b9e986',
-    pink: '#faadc1',
-    purple: '#d689ff',
-    orange: '#fdb400',
-  };
-  myDiagram: go.Diagram = new go.Diagram();
-  constructor(public auth: AuthService) { }
-  ngOnInit() {
-    const $ = go.GraphObject.make;
-    this.myDiagram = $(
-      go.Diagram,
-      'myDiagramDiv', // must name or refer to the DIV HTML element
-      {
-        allowDelete: false,
-        allowCopy: false,
-        layout: $(go.ForceDirectedLayout, {
-          setsPortSpots: false,
-        }),
-        'undoManager.isEnabled': true,
-      }
-    );
+  // // Big object that holds app-level state data
+  // // As of gojs-angular 2.0, immutability is expected and required of state for ease of change detection.
+  // // Whenever updating state, immutability must be preserved. It is recommended to use immer for this, a small package that makes working with immutable data easy.
+  // public state = {
+  //   // Diagram state props
+  //   diagramNodeData: [
+  //     { id: 'Alpha', text: "Alpha", color: 'lightblue', loc: "0 0" },
+  //     { id: 'Beta', text: "Beta", color: 'orange', loc: "100 0" },
+  //     { id: 'Gamma', text: "Gamma", color: 'lightgreen', loc: "0 100" },
+  //     { id: 'Delta', text: "Delta", color: 'pink', loc: "100 100" }
+  //   ],
+  //   diagramLinkData: [
+  //     { key: -1, from: 'Alpha', to: 'Beta', fromPort: 'r', toPort: '1' },
+  //     { key: -2, from: 'Alpha', to: 'Gamma', fromPort: 'b', toPort: 't' },
+  //     { key: -3, from: 'Beta', to: 'Beta' },
+  //     { key: -4, from: 'Gamma', to: 'Delta', fromPort: 'r', toPort: 'l' },
+  //     { key: -5, from: 'Delta', to: 'Alpha', fromPort: 't', toPort: 'r' }
+  //   ],
+  //   diagramModelData: { prop: 'value' },
+  //   skipsDiagramUpdate: false,
+  //   selectedNodeData: null, // used by InspectorComponent
 
-    // the template for each attribute in a node's array of item data
-    var itemTempl = $(
-      go.Panel,
-      'Horizontal',
-      $(
-        go.Shape,
-        {
-          desiredSize: new go.Size(15, 15),
-          strokeJoin: 'round',
-          strokeWidth: 1,
-          stroke: null,
-          margin: 2,
-        },
-        new go.Binding('figure', 'figure'),
-        new go.Binding('fill', 'color'),
-        new go.Binding('stroke', 'color')
-      ),
-      $(
-        go.TextBlock,
-        {
-          stroke: '#333333',
-          font: 'bold 14px sans-serif',
-        },
-        new go.Binding('text', 'name')
-      )
-    );
+  //   // Palette state props
+  //   paletteNodeData: [
+  //     { key: 'Epsilon', text: 'Epsilon', color: 'red' },
+  //     { key: 'Kappa', text: 'Kappa', color: 'purple' }
+  //   ],
+  //   paletteModelData: { prop: 'val' }
+  // };
 
-    // define the Node template, representing an entity
-    this.myDiagram.nodeTemplate = $(
-      go.Node,
-      'Auto', // the whole node panel
-      {
-        selectionAdorned: true,
-        resizable: true,
-        layoutConditions: go.Part.LayoutStandard & ~go.Part.LayoutNodeSized,
-        fromSpot: go.Spot.AllSides,
-        toSpot: go.Spot.AllSides,
-        isShadowed: true,
-        shadowOffset: new go.Point(3, 3),
-        shadowColor: '#C5C1AA',
-      },
-      new go.Binding('location', 'location').makeTwoWay(),
+  // public diagramDivClassName: string = 'myDiagramDiv';
+  // public paletteDivClassName = 'myPaletteDiv';
 
-      new go.Binding(
-        'desiredSize',
-        'visible',
-        (v) => new go.Size(NaN, NaN)
-      ).ofObject('LIST'),
-      // define the node's outer shape, which will surround the Table
-      $(go.Shape, 'RoundedRectangle', {
-        fill: 'white',
-        stroke: '#eeeeee',
-        strokeWidth: 1,
-      }),
-      $(
-        go.Panel,
-        'Table',
-        { margin: 8, stretch: go.GraphObject.Fill },
-        $(go.RowColumnDefinition, {
-          row: 0,
-          sizing: go.RowColumnDefinition.None,
-        }),
-        // the table header
-        $(
-          go.TextBlock,
-          {
-            row: 0,
-            alignment: go.Spot.Center,
-            margin: new go.Margin(0, 24, 0, 2), // leave room for Button
-            font: 'bold 16px sans-serif',
-          },
-          new go.Binding('text', 'key')
-        ),
-        // the collapse/expand button
-        $(
-          'PanelExpanderButton',
-          'LIST', // the name of the element whose visibility this button toggles
-          { row: 0, alignment: go.Spot.TopRight }
-        ),
-        // the list of Panels, each showing an attribute
-        $(
-          go.Panel,
-          'Vertical',
-          {
-            name: 'LIST',
-            row: 1,
-            padding: 3,
-            alignment: go.Spot.TopLeft,
-            defaultAlignment: go.Spot.Left,
-            stretch: go.GraphObject.Horizontal,
-            itemTemplate: itemTempl,
-          },
-          new go.Binding('itemArray', 'items')
-        )
-      ) // end Table Panel
-    ); // end Node
+  // // initialize diagram / templates
+  // public initDiagram(): go.Diagram {
 
-    // define the Link template, representing a relationship
-    this.myDiagram.linkTemplate = $(
-      go.Link, // the whole link panel
-      {
-        selectionAdorned: true,
-        layerName: 'Foreground',
-        reshapable: true,
-        routing: go.Link.AvoidsNodes,
-        corner: 5,
-        curve: go.Link.JumpOver,
-      },
-      $(
-        go.Shape, // the link shape
-        { stroke: '#303B45', strokeWidth: 2.5 }
-      ),
-      $(
-        go.TextBlock, // the "from" label
-        {
-          textAlign: 'center',
-          font: 'bold 14px sans-serif',
-          stroke: '#1967B3',
-          segmentIndex: 0,
-          segmentOffset: new go.Point(NaN, NaN),
-          segmentOrientation: go.Link.OrientUpright,
-        },
-        new go.Binding('text', 'text')
-      ),
-      $(
-        go.TextBlock, // the "to" label
-        {
-          textAlign: 'center',
-          font: 'bold 14px sans-serif',
-          stroke: '#1967B3',
-          segmentIndex: -1,
-          segmentOffset: new go.Point(NaN, NaN),
-          segmentOrientation: go.Link.OrientUpright,
-        },
-        new go.Binding('text', 'toText')
-      )
-    );
+  //   const $ = go.GraphObject.make;
+  //   const dia = $(go.Diagram, {
+  //     'undoManager.isEnabled': true,
+  //     'clickCreatingTool.archetypeNodeData': { text: 'new node', color: 'lightblue' },
+  //     model: $(go.GraphLinksModel,
+  //       {
+  //         nodeKeyProperty: 'id',
+  //         linkToPortIdProperty: 'toPort',
+  //         linkFromPortIdProperty: 'fromPort',
+  //         linkKeyProperty: 'key' // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
+  //       }
+  //     )
+  //   });
 
-    this.myDiagram.model = new go.GraphLinksModel({
-      copiesArrays: true,
-      copiesArrayObjects: true,
-      nodeDataArray: this.nodeDataArray,
-      linkDataArray: this.linkDataArray,
-    });
-    this.createExample();
-  }
-  ngOnChanges(changes: SimpleChanges): void { }
+  //   dia.commandHandler.archetypeGroupData = { key: 'Group', isGroup: true };
 
-  createExample() {
-    // create the model for the E-R diagram
-    this.nodeDataArray = [
-      {
-        key: 'Products',
-        items: [
-          {
-            name: 'ProductID',
-            iskey: true,
-            figure: 'Decision',
-            color: this.colors.red,
-          },
-          {
-            name: 'ProductName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: this.colors.blue,
-          },
-          {
-            name: 'SupplierID',
-            iskey: false,
-            figure: 'Decision',
-            color: 'purple',
-          },
-          {
-            name: 'CategoryID',
-            iskey: false,
-            figure: 'Decision',
-            color: 'purple',
-          },
-        ],
-      },
-      {
-        key: 'Vendedores',
-        items: [
-          {
-            name: 'SupplierID',
-            iskey: true,
-            figure: 'Decision',
-            color: this.colors.red,
-          },
-          {
-            name: 'CompanyName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: this.colors.blue,
-          },
-          {
-            name: 'ContactName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: this.colors.blue,
-          },
-          {
-            name: 'Address',
-            iskey: false,
-            figure: 'Hexagon',
-            color: this.colors.blue,
-          },
-        ],
-      },
-      {
-        key: 'Categories',
-        items: [
-          {
-            name: 'CategoryID',
-            iskey: true,
-            figure: 'Decision',
-            color: this.colors.red,
-          },
-          {
-            name: 'CategoryName',
-            iskey: false,
-            figure: 'Hexagon',
-            color: this.colors.blue,
-          },
-          {
-            name: 'Description',
-            iskey: false,
-            figure: 'Hexagon',
-            color: this.colors.blue,
-          },
-          {
-            name: 'Picture',
-            iskey: false,
-            figure: 'TriangleUp',
-            color: this.colors.pink,
-          },
-        ],
-      },
-      {
-        key: 'Order Details',
-        items: [
-          {
-            name: 'OrderID',
-            iskey: true,
-            figure: 'Decision',
-            color: this.colors.red,
-          },
-          {
-            name: 'ProductID',
-            iskey: true,
-            figure: 'Decision',
-            color: this.colors.red,
-          },
-          {
-            name: 'UnitPrice',
-            iskey: false,
-            figure: 'Circle',
-            color: this.colors.green,
-          },
-          {
-            name: 'Quantity',
-            iskey: false,
-            figure: 'Circle',
-            color: this.colors.green,
-          },
-          {
-            name: 'Discount',
-            iskey: false,
-            figure: 'Circle',
-            color: this.colors.green,
-          },
-        ],
-      },
-    ];
+  //   const makePort = function (id: string, spot: go.Spot) {
+  //     return $(go.Shape, 'Circle',
+  //       {
+  //         opacity: .5,
+  //         fill: 'gray', strokeWidth: 0, desiredSize: new go.Size(8, 8),
+  //         portId: id, alignment: spot,
+  //         fromLinkable: true, toLinkable: true
+  //       }
+  //     );
+  //   }
 
-    this.linkDataArray = [
-      {
-        key: -1,
-        from: 'Products',
-        to: 'Vendedores',
-        text: '0..N',
-        toText: '1',
-      },
-      {
-        key: -2,
-        from: 'Products',
-        to: 'Categories',
-        text: '0..N',
-        toText: '1',
-      },
-      {
-        key: -3,
-        from: 'Order Details',
-        to: 'Products',
-        text: '0..N',
-        toText: '1',
-      },
-    ];
+  //   // define the Node template
+  //   dia.nodeTemplate =
+  //     $(go.Node, 'Spot',
+  //       {
+  //         contextMenu:
+  //           $('ContextMenu',
+  //             $('ContextMenuButton',
+  //               $(go.TextBlock, 'Group'),
+  //               { click: function (e, obj) { e.diagram.commandHandler.groupSelection(); } },
+  //               new go.Binding('visible', '', function (o) {
+  //                 return o.diagram.selection.count > 1;
+  //               }).ofObject())
+  //           )
+  //       },
+  //       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+  //       $(go.Panel, 'Auto',
+  //         $(go.Shape, 'RoundedRectangle', { stroke: null },
+  //           new go.Binding('fill', 'color', (c, panel) => {
 
-    // Actualizar datos de nodos
-    this.nodeDataArray.forEach((nodeData) => {
-      var node = this.myDiagram.model.findNodeDataForKey(nodeData.key);
-      if (node !== null) {
-        this.myDiagram.model.setDataProperty(node, 'items', nodeData.items);
-      }
-    });
+  //             return c;
+  //           })
+  //         ),
+  //         $(go.TextBlock, { margin: 8, editable: true },
+  //           new go.Binding('text').makeTwoWay())
+  //       ),
+  //       // Ports
+  //       makePort('t', go.Spot.TopCenter),
+  //       makePort('l', go.Spot.Left),
+  //       makePort('r', go.Spot.Right),
+  //       makePort('b', go.Spot.BottomCenter)
+  //     );
 
-    // Actualizar datos de enlaces
-    this.linkDataArray.forEach((linkData) => {
-      var link = this.myDiagram.model.findNodeDataForKey(linkData.key);
-      if (link !== null) {
-        this.myDiagram.model.setDataProperty(link, 'from', linkData.from);
-        this.myDiagram.model.setDataProperty(link, 'to', linkData.to);
-        this.myDiagram.model.setDataProperty(link, 'text', linkData.text);
-        this.myDiagram.model.setDataProperty(link, 'toText', linkData.toText);
-      }
-    });
+  //   return dia;
+  // }
 
-    // Asignar el modelo actualizado al diagrama
-    this.myDiagram.model = new go.GraphLinksModel({
-      copiesArrays: true,
-      copiesArrayObjects: true,
-      nodeDataArray: this.nodeDataArray,
-      linkDataArray: this.linkDataArray,
-    });
-  }
+  // // When the diagram model changes, update app data to reflect those changes. Be sure to use immer's "produce" function to preserve immutability
+  // public diagramModelChange = function (changes: go.IncrementalData) {
+  //   if (!changes) return;
+  //   const appComp = this;
+  //   this.state = produce(this.state, draft => {
+  //     // set skipsDiagramUpdate: true since GoJS already has this update
+  //     // this way, we don't log an unneeded transaction in the Diagram's undoManager history
+  //     draft.skipsDiagramUpdate = true;
+  //     draft.diagramNodeData = DataSyncService.syncNodeData(changes, draft.diagramNodeData, appComp.observedDiagram.model);
+  //     draft.diagramLinkData = DataSyncService.syncLinkData(changes, draft.diagramLinkData, appComp.observedDiagram.model);
+  //     draft.diagramModelData = DataSyncService.syncModelData(changes, draft.diagramModelData);
+  //     // If one of the modified nodes was the selected node used by the inspector, update the inspector selectedNodeData object
+  //     const modifiedNodeDatas = changes.modifiedNodeData;
+  //     if (modifiedNodeDatas && draft.selectedNodeData) {
+  //       for (let i = 0; i < modifiedNodeDatas.length; i++) {
+  //         const mn = modifiedNodeDatas[i];
+  //         const nodeKeyProperty = appComp.myDiagramComponent.diagram.model.nodeKeyProperty as string;
+  //         if (mn[nodeKeyProperty] === draft.selectedNodeData[nodeKeyProperty]) {
+  //           draft.selectedNodeData = mn;
+  //         }
+  //       }
+  //     }
+  //   });
+  // };
 
-  createEntity() {
-    let entity: EntityDB = {
-      key: 'Tienda',
-      items: [
-        {
-          name: 'TiendaID',
-          iskey: true,
-          figure: '',
-          color: this.colors.red,
-        },
-      ],
-    };
+  // public initPalette(): go.Palette {
+  //   const $ = go.GraphObject.make;
+  //   const palette = $(go.Palette);
 
-    //add note to the node list
-    this.nodeDataArray.push(entity);
-    this.myDiagram.model.addNodeData(entity);
+  //   // define the Node template
+  //   palette.nodeTemplate =
+  //     $(go.Node, 'Auto',
+  //       $(go.Shape, 'RoundedRectangle',
+  //         {
+  //           stroke: null
+  //         },
+  //         new go.Binding('fill', 'color')
+  //       ),
+  //       $(go.TextBlock, { margin: 8 },
+  //         new go.Binding('text', 'key'))
+  //     );
 
-    //test addLink
-    let relationship: RelationShip = {
-      key: -4,
-      from: 'Tienda',
-      to: 'Products',
-      toText: '1',
-      text: '1',
-    };
-    //add link to the relationship array and update the model
-    this.linkDataArray.push(relationship);
-    this.updateModel();
-  }
-  updateModel(): void {
-    // Actualizar datos de nodos
-    this.nodeDataArray.forEach((nodeData) => {
-      var node = this.myDiagram.model.findNodeDataForKey(nodeData.key);
-      if (node !== null) {
-        this.myDiagram.model.setDataProperty(node, 'items', nodeData.items);
-      }
-    });
+  //   palette.model = $(go.GraphLinksModel);
+  //   return palette;
+  // }
 
-    // Actualizar datos de enlaces
-    this.linkDataArray.forEach((linkData) => {
-      var link = this.myDiagram.model.findNodeDataForKey(linkData.key);
-      if (link !== null) {
-        this.myDiagram.model.setDataProperty(link, 'from', linkData.from);
-        this.myDiagram.model.setDataProperty(link, 'to', linkData.to);
-        this.myDiagram.model.setDataProperty(link, 'text', linkData.text);
-        this.myDiagram.model.setDataProperty(link, 'toText', linkData.toText);
-      }
-    });
+  // constructor(private cdr: ChangeDetectorRef, public auth: AuthService, private boardService: BoardComponent) { }
 
-    // Asignar el modelo actualizado al diagrama
-    this.myDiagram.model = new go.GraphLinksModel({
-      copiesArrays: true,
-      copiesArrayObjects: true,
-      nodeDataArray: this.nodeDataArray,
-      linkDataArray: this.linkDataArray,
-    });
-  }
-}
+  // // Overview Component testing
+  // public oDivClassName = 'myOverviewDiv';
+  // public initOverview(): go.Overview {
+  //   const $ = go.GraphObject.make;
+  //   const overview = $(go.Overview);
+  //   return overview;
+  // }
+  // public observedDiagram = null;
 
-interface RelationShip {
-  key: number;
-  from: string;
-  to: string;
-  text: string;
-  toText: string;
-}
+  // // currently selected node; for inspector
+  // public selectedNodeData: go.ObjectData = null;
 
-interface EntityDB {
-  key: string;
-  items: Array<Features>;
-}
+  // public ngAfterViewInit() {
+  //   if (this.observedDiagram) return;
+  //   this.observedDiagram = this.myDiagramComponent.diagram;
+  //   this.cdr.detectChanges(); // IMPORTANT: without this, Angular will throw ExpressionChangedAfterItHasBeenCheckedError (dev mode only)
 
-interface Features {
-  name: string;
-  iskey: boolean;
-  figure: string;
-  color: string;
+  //   const appComp: BoardComponent = this;
+  //   // listener for inspector
+  //   this.myDiagramComponent.diagram.addDiagramListener('ChangedSelection', function (e) {
+  //     if (e.diagram.selection.count === 0) {
+  //       appComp.selectedNodeData = null;
+  //     }
+  //     const node = e.diagram.selection.first();
+  //     appComp.state = produce(appComp.state, draft => {
+  //       if (node instanceof go.Node) {
+  //         var idx = draft.diagramNodeData.findIndex(nd => nd.id == node.data.id);
+  //         var nd = draft.diagramNodeData[idx];
+  //         draft.selectedNodeData = nd;
+  //       } else {
+  //         draft.selectedNodeData = null;
+  //       }
+  //     });
+  //   });
+  // } // end ngAfterViewInit
+
+
+  // /**
+  //  * Update a node's data based on some change to an inspector row's input
+  //  * @param changedPropAndVal An object with 2 entries: "prop" (the node data prop changed), and "newVal" (the value the user entered in the inspector <input>)
+  //  */
+  // public handleInspectorChange(changedPropAndVal: any) {
+
+  //   const path = changedPropAndVal.prop;
+  //   const value = changedPropAndVal.newVal;
+
+  //   this.state = produce(this.state, draft => {
+  //     var data = draft.selectedNodeData;
+  //     data[path] = value;
+  //     const key = data.id;
+  //     const idx = draft.diagramNodeData.findIndex(nd => nd.id == key);
+  //     if (idx >= 0) {
+  //       draft.diagramNodeData[idx] = data;
+  //       draft.skipsDiagramUpdate = false; // we need to sync GoJS data with this new app state, so do not skips Diagram update
+  //     }
+  //   });
+  // }
+
 }
