@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
@@ -10,5 +10,5 @@ export class UserProfileComponent {
   /**
    *
    */
-  constructor(public auth: AuthService) { }
+  auth: AuthService = inject(AuthService)
 }

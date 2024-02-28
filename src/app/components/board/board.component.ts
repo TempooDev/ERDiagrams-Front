@@ -22,7 +22,6 @@ import { Colors } from 'src/app/utils/colors';
 })
 export class BoardComponent {
 
-  auth: AuthService = inject(AuthService);
   // @ViewChild('myDiagram', { static: true }) public myDiagramComponent: DiagramComponent;
   // @ViewChild('myPalette', { static: true }) public myPaletteComponent: PaletteComponent;
 

@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as go from 'gojs';
-import { NgTemplateOutlet } from '@angular/common';
-import { Observable } from 'rxjs';
 import { RelationShip } from '../entities/relationship';
 import { EntityDB } from '../entities/entitydb';
 import { Colors } from '../utils/colors';
-interface InitialDiagram {
-  diagram: go.Diagram,
-  nodes: Array<EntityDB>,
-  links: Array<RelationShip>
-}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,10 +13,7 @@ export class BoardService {
 
   private linkDataArray: Array<RelationShip> = [];
 
-  constructor() {
 
-
-  }
   diagram(): go.Diagram { return this.myDiagram }
   nodes(): Array<EntityDB> { return this.nodeDataArray }
   links(): Array<RelationShip> { return this.linkDataArray }

@@ -13,6 +13,7 @@ import { AuthenticationButtonComponent } from './components/authentication-butto
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { BoardComponent } from './components/board/board.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { HeaderComponent } from './components/header/header.component';
 
 const appRoutes: Routes = [{ path: '', component: HomeComponent }];
 
@@ -26,6 +27,7 @@ const appRoutes: Routes = [{ path: '', component: HomeComponent }];
     UserProfileComponent,
     BoardComponent,
     SidebarComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,4 +45,4 @@ const appRoutes: Routes = [{ path: '', component: HomeComponent }];
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

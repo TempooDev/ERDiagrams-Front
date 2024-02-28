@@ -1,0 +1,18 @@
+<header class="flex flex-row h-32 ">
+    <!-- <div class="flex flex-row justify-center">
+      <button class="border-solid border-black border-2 w-20 m-2" (click)="resetDiagram()">
+        Crear
+      </button>
+      <button class="border-solid border-black border-2 w-20 m-2" (click)="createEntity()">
+        Crear entidad
+      </button>
+    </div> -->
+    <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+        <app-logout-button class="border-solid border-black border-2 w-20 m-2 justify-center"></app-logout-button>
+        <app-user-profile class="border-solid border-black border-2 w-20 m-2"></app-user-profile>
+    </ng-container>
+    <ng-template #loggedOut>
+        <app-login-button class="border-solid border-red border-2 w-20 h-20 m-2"></app-login-button>
+    </ng-template>
+
+</header>

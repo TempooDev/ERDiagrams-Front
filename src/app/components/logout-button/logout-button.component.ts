@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
@@ -11,10 +11,9 @@ export class LogoutButtonComponent implements OnInit {
   /**
    *
    */
-  constructor(
-    public auth: AuthService,
-    @Inject(DOCUMENT) public document: Document
-  ) { }
+  public auth: AuthService = inject(AuthService);
+  public document: Document = inject(DOCUMENT)
+
 
   ngOnInit(): void { }
 }
