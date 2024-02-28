@@ -5,6 +5,7 @@ import {
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
+  inject,
 } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import * as go from 'gojs';
@@ -21,6 +22,7 @@ import { Colors } from 'src/app/utils/colors';
 })
 export class BoardComponent {
 
+  auth: AuthService = inject(AuthService);
   // @ViewChild('myDiagram', { static: true }) public myDiagramComponent: DiagramComponent;
   // @ViewChild('myPalette', { static: true }) public myPaletteComponent: PaletteComponent;
 
