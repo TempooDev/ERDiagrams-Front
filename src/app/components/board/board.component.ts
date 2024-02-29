@@ -17,7 +17,7 @@ import { Colors } from 'src/app/utils/colors';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
-  styleUrls: ['./board.component.css'],
+  styleUrls: ['./board.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom
 })
 export class BoardComponent {
