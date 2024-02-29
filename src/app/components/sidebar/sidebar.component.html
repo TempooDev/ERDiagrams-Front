@@ -1,8 +1,9 @@
-<div class="border-2 border-solid border-black w-1/3 h-screen  duration-300">
-  <section>
-    <b>Scratch</b>
-  </section>
-  <section>
-    <b>Entitys</b>
-  </section>
-</div>
+<p-sidebar [(visible)]="sidebarVisible">
+  <h3>Sidebar</h3>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua.
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </p>
+</p-sidebar>
+<p-button (click)="sidebarVisible = true" icon="pi pi-arrow-right blue"></p-button>

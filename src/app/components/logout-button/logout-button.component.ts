@@ -1,7 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { ButtonModule } from 'primeng/button';
 
+ButtonModule
 @Component({
   selector: 'app-logout-button',
   templateUrl: './logout-button.component.html',
