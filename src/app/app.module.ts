@@ -14,9 +14,6 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { BoardComponent } from './components/board/board.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
-import { SidebarModule } from 'primeng/sidebar';
-import { ButtonModule } from 'primeng/button';
-import { AvatarModule } from 'primeng/avatar';
 
 const appRoutes: Routes = [{ path: '', component: HomeComponent }];
 
@@ -33,9 +30,7 @@ const appRoutes: Routes = [{ path: '', component: HomeComponent }];
     HeaderComponent,
   ],
   imports: [
-    SidebarModule,
-    ButtonModule,
-    AvatarModule,
+
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { ButtonModule } from 'primeng/button';
+
 @Component({
   selector: 'app-login-button',
   templateUrl: './login-button.component.html',
