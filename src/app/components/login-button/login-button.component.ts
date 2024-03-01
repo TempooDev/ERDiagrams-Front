@@ -3,9 +3,11 @@ import { AuthService } from '@auth0/auth0-angular';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-login-button',
-  templateUrl: './login-button.component.html',
-  styleUrls: ['./login-button.component.scss'],
+    selector: 'app-login-button',
+    templateUrl: './login-button.component.html',
+    styleUrls: ['./login-button.component.scss'],
+    standalone: true,
+    imports: [MatButtonModule],
 })
 export class LoginButtonComponent implements OnInit {
   /**
