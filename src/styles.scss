@@ -1,3 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+// Importa el tema por defecto de Angular Material
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+// Importa los estilos de Tailwind CSS
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
