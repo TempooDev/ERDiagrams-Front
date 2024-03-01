@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ERDiagram:build:production"
+              "buildTarget": "ERDiagram:build:production"
             },
             "development": {
-              "browserTarget": "ERDiagram:build:development"
+              "buildTarget": "ERDiagram:build:development"
             }
           },
           "defaultConfiguration": "development"
