@@ -14,6 +14,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { BoardComponent } from './components/board/board.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
+import { MatButtonModule, MatMiniFabButton } from '@angular/material/button';
 
 const appRoutes: Routes = [{ path: '', component: HomeComponent }];
 
@@ -30,13 +31,13 @@ const appRoutes: Routes = [{ path: '', component: HomeComponent }];
     HeaderComponent,
   ],
   imports: [
-
+    MatButtonModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AuthModule.forRoot({
-      domain: 'dev-va85m1jw6xjmlb5z.eu.auth0.com',
-      clientId: '7UTu83vCfuoiyCFbt843mS55q3lH8BoJ',
+      domain: env.auth.domain,
+      clientId: env.auth.clientId,
       authorizationParams: {
         redirect_uri: window.location.origin,
       },

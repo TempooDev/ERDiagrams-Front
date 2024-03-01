@@ -1,8 +1,8 @@
-<header class="container text-center ">
+<header>
 
-  <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
-    <app-logout-button class="row"></app-logout-button>
-    <app-user-profile class="row"></app-user-profile>
+  <ng-container class="flex flex-col" *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+    <app-logout-button class="flex-col"></app-logout-button>
+    <app-user-profile class="flex-col"></app-user-profile>
   </ng-container>
   <ng-template #loggedOut>
     <app-login-button></app-login-button>
