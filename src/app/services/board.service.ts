@@ -33,4 +33,8 @@ export class BoardService {
     this._linkDataArray.push(link);
     this.linkDataArray$.next(this._linkDataArray);
   }
+  cleanNode() {
+    this._nodeDataArray = [];
+    this.nodeDataArray$.next(this._nodeDataArray);
+  }
 }
