@@ -6,31 +6,31 @@ import { Colors } from '../utils/colors';
 import { BehaviorSubject, map, tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BoardService {
+  private _nodeDataArray: EntityDB[] = [
+    {
+      key: 'name',
+      items: [],
+    },
+  ];
+  private _linkDataArray: RelationShip[] = [];
+  nodeDataArray$: BehaviorSubject<EntityDB[]> = new BehaviorSubject(
+    this._nodeDataArray
+  );
 
-  nodeDataArray$: BehaviorSubject<Array<EntityDB>> = new BehaviorSubject([{
-    key: 'name',
-    items: []
-  }]);
-
-  linkDataArray$: BehaviorSubject<Array<RelationShip>> = new BehaviorSubject([]);
+  linkDataArray$: BehaviorSubject<RelationShip[]> = new BehaviorSubject(
+    this._linkDataArray
+  );
 
   setNode(node: EntityDB) {
-    this.nodeDataArray$.pipe(map(nodes => {
-      nodes.push(node)
-    }),
-      tap(nodes => console.log(nodes)))
+    this._nodeDataArray.push(node);
+    this.nodeDataArray$.next(this._nodeDataArray);
   }
 
   setLink(link: RelationShip) {
-    this.linkDataArray$.pipe(map(links => {
-      link ? links = [...links, link] : links
-    }))
+    this._linkDataArray.push(link);
+    this.linkDataArray$.next(this._linkDataArray);
   }
-
-
-
-
 }
