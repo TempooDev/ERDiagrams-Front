@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable, combineLatest, startWith } from 'rxjs';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { BoardService } from 'src/app/services/board.service';
@@ -14,19 +10,10 @@ import { EntityDB } from 'src/app/entities/entitydb';
   styleUrls: ['./board.component.scss'],
   imports: [CommonModule],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardComponent {
-  private _boardService = inject(BoardService)
-  nodes$ = this._boardService.nodeDataArray$
-  links$ = this._boardService.linkDataArray$
-
-  addNode() {
-    const node: EntityDB = {
-      key: 'name',
-      items: []
-    }
-    this._boardService.setNode(node)
-  }
-
+  private _boardService = inject(BoardService);
+  nodes$ = this._boardService.nodeDataArray$;
+  links$ = this._boardService.linkDataArray$;
 }

@@ -5,20 +5,42 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { LogoutButtonComponent } from '../logout-button/logout-button.component';
 import { NgIf, AsyncPipe } from '@angular/common';
 import { DiagramsService } from 'src/app/services/diagrams.service';
+import { BoardService } from 'src/app/services/board.service';
+import { EntityDB } from 'src/app/entities/entitydb';
+import { MatButton } from '@angular/material/button';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [NgIf, LogoutButtonComponent, UserProfileComponent, LoginButtonComponent, AsyncPipe]
+  imports: [
+    NgIf,
+    LogoutButtonComponent,
+    UserProfileComponent,
+    LoginButtonComponent,
+    AsyncPipe,
+    MatButton,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-
   auth: AuthService = inject(AuthService);
-  diagramService = inject(DiagramsService)
+  _diagramService = inject(DiagramsService);
+  _boardService = inject(BoardService);
 
   ngOnInit() {
-    this.diagramService.getDiagrams()
+    this._diagramService.getDiagrams();
+  }
+  addNode() {
+    const node: EntityDB = {
+      key: 'name',
+      items: [],
+    };
+    this._boardService.setNode(node);
+  }
+  cleanNode() {
+    this._boardService.cleanNode();
   }
 }
