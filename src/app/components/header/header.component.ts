@@ -33,14 +33,5 @@ export class HeaderComponent {
   ngOnInit() {
     this._diagramService.getDiagrams();
   }
-  addNode() {
-    const node: EntityDB = {
-      key: 'name',
-      items: [],
-    };
-    this._boardService.setNode(node);
-  }
-  cleanNode() {
-    this._boardService.cleanNode();
-  }
+
 }
