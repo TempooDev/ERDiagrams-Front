@@ -15,7 +15,13 @@ export class BoardService {
       items: [],
     },
   ];
-  private _linkDataArray: RelationShip[] = [];
+  private _linkDataArray: RelationShip[] = [{
+    key: -1,
+    from: "",
+    to: "",
+    text: "",
+    toText: ""
+  }];
   nodeDataArray$: BehaviorSubject<EntityDB[]> = new BehaviorSubject(
     this._nodeDataArray
   );
