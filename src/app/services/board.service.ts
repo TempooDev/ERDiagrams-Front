@@ -4,25 +4,17 @@ import { RelationShip } from '../entities/relationship';
 import { EntityDB } from '../entities/entitydb';
 import { Colors } from '../utils/colors';
 import { BehaviorSubject, map, tap } from 'rxjs';
+import { Features } from '../entities/features';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardService {
 
-  private _nodeDataArray: EntityDB[] = [
-    {
-      key: 'name',
-      items: [],
-    },
-  ];
-  private _linkDataArray: RelationShip[] = [{
-    key: -1,
-    from: "",
-    to: "",
-    text: "",
-    toText: ""
-  }];
+
+  private _nodeDataArray: EntityDB[] = []
+
+  private _linkDataArray: RelationShip[] = [];
   nodeDataArray$: BehaviorSubject<EntityDB[]> = new BehaviorSubject(
     this._nodeDataArray
   );
@@ -47,5 +39,18 @@ export class BoardService {
   cleanLinks() {
     this._linkDataArray = []
     this.linkDataArray$.next(this._linkDataArray)
+  }
+  setItemToNode(itemf: Features, key: string) {
+    const index = this._nodeDataArray.findIndex(e => e.key === key)
+    const node = this._nodeDataArray[index]
+    this._nodeDataArray.filter((ele, ind) => ind !== index)
+    console.log(node)
+    node.items.push(itemf)
+    this._nodeDataArray.push(node);
+    this.nodeDataArray$.next(this._nodeDataArray)
+  }
+
+  findNode(key: string): number {
+    return this._nodeDataArray.findIndex(e => e.key === key)
   }
 }
