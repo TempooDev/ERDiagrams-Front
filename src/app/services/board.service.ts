@@ -9,6 +9,7 @@ import { BehaviorSubject, map, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class BoardService {
+
   private _nodeDataArray: EntityDB[] = [
     {
       key: 'name',
@@ -42,5 +43,9 @@ export class BoardService {
   cleanNode() {
     this._nodeDataArray = [];
     this.nodeDataArray$.next(this._nodeDataArray);
+  }
+  cleanLinks() {
+    this._linkDataArray = []
+    this.linkDataArray$.next(this._linkDataArray)
   }
 }

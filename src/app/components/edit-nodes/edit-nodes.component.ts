@@ -17,7 +17,6 @@ export class EditNodesComponent {
   private _formBuilder = inject(FormBuilder)
   private _boardService = inject(BoardService);
   nodes$ = this._boardService.nodeDataArray$;
-  links$ = this._boardService.linkDataArray$;
   formGroup: FormGroup = this._formBuilder.group({
     'key': [null],
     'name': [null],

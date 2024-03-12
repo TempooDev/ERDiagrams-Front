@@ -1,0 +1,32 @@
+<mat-card>
+    <mat-card>
+        <mat-card-content>
+
+            <form [formGroup]="formGroup" (ngSubmit)="addLink(formGroup.value)" class="form">
+
+
+                <mat-form-field class="form-element">
+                    <input matInput formControlName="key" placeholder="Key">
+                </mat-form-field>
+                <mat-form-field class="form-element">
+                    <input matInput formControlName="from" placeholder="from">
+                </mat-form-field>
+                <mat-form-field class="form-element">
+                    <input matInput formControlName="to" placeholder="to">
+                </mat-form-field>
+                <mat-form-field class="form-element">
+                    <input matInput formControlName="toText" placeholder="toText">
+                </mat-form-field>
+
+            </form>
+
+
+            <button mat-raised-button color="primary" (click)="addLink(formGroup.value)" class="">
+                Add Link
+            </button>
+
+            <button mat-raised-button color="primary" (click)="cleanLinks()" class="">
+                Clean
+            </button>
+        </mat-card-content>
+    </mat-card>
