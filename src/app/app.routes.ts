@@ -6,6 +6,6 @@ import { AuthGuard } from '@auth0/auth0-angular';
 export const routes = [
     {
         path: '', component: HomeComponent,
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     }
 ];
