@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^17.2.3",
     "@angular/router": "^17.2.3",
     "@auth0/auth0-angular": "^2.1.0",
+    "@microsoft/signalr": "^8.0.0",
     "gojs": "^2.3.7",
     "gojs-angular": "^2.0.6",
     "node": "^20.11.1",
