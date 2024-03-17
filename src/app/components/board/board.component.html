@@ -1,8 +1,11 @@
-<ng-container *ngIf="nodes$ | async as nodes;">
-  {{ nodes | json }}
-  {{links$.value | json}}
+<ng-container *ngIf="nodes$ | async as nodes">
+  Nodes: {{ nodes | json }}
+  <br />
 </ng-container>
-
+<ng-container *ngIf="links$ | async as links">
+  Links: {{ links | json }}
+  <br />
+</ng-container>
 <!-- <div class="left">
   Palette
   <gojs-palette #myPalette [initPalette]='initPalette' [divClassName]='paletteDivClassName'

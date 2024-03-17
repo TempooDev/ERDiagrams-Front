@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, inject, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Observable, combineLatest, startWith } from 'rxjs';
 import { CommonModule, JsonPipe } from '@angular/common';
-import { BoardService } from 'src/app/services/board.service';
-import { RelationShip } from 'src/app/entities/relationship';
-import { EntityDB } from 'src/app/entities/entitydb';
+import { BoardService } from 'src/app/core/services/board.service';
+import { RelationShip } from 'src/app/core/entities/relationship';
+import { EntityDB } from 'src/app/core/entities/entitydb';
 import * as go from 'gojs';
 import { DataSyncService, DiagramComponent, GojsAngularModule, PaletteComponent } from 'gojs-angular';
 import produce from "immer";

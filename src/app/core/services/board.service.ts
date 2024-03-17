@@ -10,9 +10,7 @@ import { Features } from '../entities/features';
   providedIn: 'root',
 })
 export class BoardService {
-
-
-  private _nodeDataArray: EntityDB[] = []
+  private _nodeDataArray: EntityDB[] = [];
 
   private _linkDataArray: RelationShip[] = [];
   nodeDataArray$: BehaviorSubject<EntityDB[]> = new BehaviorSubject(
@@ -37,20 +35,22 @@ export class BoardService {
     this.nodeDataArray$.next(this._nodeDataArray);
   }
   cleanLinks() {
-    this._linkDataArray = []
-    this.linkDataArray$.next(this._linkDataArray)
+    this._linkDataArray = [];
+    this.linkDataArray$.next(this._linkDataArray);
   }
   setItemToNode(itemf: Features, key: string) {
-    const index = this._nodeDataArray.findIndex(e => e.key === key)
-    const node = this._nodeDataArray[index]
-    this._nodeDataArray.filter((ele, ind) => ind !== index)
-    console.log(node)
-    node.items.push(itemf)
-    this._nodeDataArray.push(node);
-    this.nodeDataArray$.next(this._nodeDataArray)
+    const index = this._nodeDataArray.findIndex((e) => e.key === key);
+    if (index !== -1) {
+      const node = this._nodeDataArray[index];
+      if (node) {
+        node.items.push(itemf);
+        this._nodeDataArray[index] = node;
+        this.nodeDataArray$.next(this._nodeDataArray);
+      }
+    }
   }
 
   findNode(key: string): number {
-    return this._nodeDataArray.findIndex(e => e.key === key)
+    return this._nodeDataArray.findIndex((e) => e.key === key);
   }
 }
