@@ -1,32 +1,48 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, inject, ChangeDetectorRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewEncapsulation,
+  inject,
+  ChangeDetectorRef,
+  ViewChild,
+} from '@angular/core';
 import { Observable, combineLatest, startWith } from 'rxjs';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { BoardService } from 'src/app/core/services/board.service';
 import { RelationShip } from 'src/app/core/entities/relationship';
 import { EntityDB } from 'src/app/core/entities/entitydb';
 import * as go from 'gojs';
-import { DataSyncService, DiagramComponent, GojsAngularModule, PaletteComponent } from 'gojs-angular';
-import produce from "immer";
+import {
+  DataSyncService,
+  DiagramComponent,
+  GojsAngularModule,
+  PaletteComponent,
+} from 'gojs-angular';
+import produce from 'immer';
 import { InspectorComponent } from '../inspector/inspector.component';
 import { FormsModule, NgModel } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { CollabService } from 'src/app/core/services/collab.service';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
-  imports: [CommonModule, JsonPipe, InspectorComponent, GojsAngularModule,
+  imports: [
+    CommonModule,
+    JsonPipe,
+    InspectorComponent,
+    GojsAngularModule,
     FormsModule,
   ],
   standalone: true,
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class BoardComponent {
-
+  private _collabService = inject(CollabService);
   private _boardService = inject(BoardService);
   nodes$ = this._boardService.nodeDataArray$;
   links$ = this._boardService.linkDataArray$;
-
-
+  roomName = this._collabService.getRoomName();
   // @ViewChild('myDiagram', { static: true }) public myDiagramComponent: DiagramComponent;
   // @ViewChild('myPalette', { static: true }) public myPaletteComponent: PaletteComponent;
 
@@ -212,7 +228,6 @@ export class BoardComponent {
   //   });
   // } // end ngAfterViewInit
 
-
   // /**
   //  * Update a node's data based on some change to an inspector row's input
   //  * @param changedPropAndVal An object with 2 entries: "prop" (the node data prop changed), and "newVal" (the value the user entered in the inspector <input>)
@@ -233,6 +248,4 @@ export class BoardComponent {
   //     }
   //   });
   // }
-
-
 }
