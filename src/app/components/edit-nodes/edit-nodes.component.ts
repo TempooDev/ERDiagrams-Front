@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EntityDB } from 'src/app/entities/entitydb';
-import { BoardService } from 'src/app/services/board.service';
+import { EntityDB } from 'src/app/core/entities/entitydb';
+import { BoardService } from 'src/app/core/services/board.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card'
 import { BehaviorSubject, map, tap } from 'rxjs';
-import { Features } from 'src/app/entities/features';
+import { Features } from 'src/app/core/entities/features';
 @Component({
   selector: 'app-edit-nodes',
   standalone: true,

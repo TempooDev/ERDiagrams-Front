@@ -7,7 +7,7 @@ import { routes } from './app.routes';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment as env } from 'src/environments/environment';
-import { loggingInterceptor } from './interceptors/logging.interceptor';
+import { loggingInterceptor } from './core/interceptors/logging.interceptor';
 
 export const appConfig: ApplicationConfig = {
 

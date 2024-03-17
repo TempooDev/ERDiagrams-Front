@@ -4,9 +4,9 @@ import { LoginButtonComponent } from '../login-button/login-button.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { LogoutButtonComponent } from '../logout-button/logout-button.component';
 import { NgIf, AsyncPipe } from '@angular/common';
-import { DiagramsService } from 'src/app/services/diagrams.service';
-import { BoardService } from 'src/app/services/board.service';
-import { EntityDB } from 'src/app/entities/entitydb';
+import { DiagramsService } from 'src/app/core/services/diagrams.service';
+import { BoardService } from 'src/app/core/services/board.service';
+import { EntityDB } from 'src/app/core/entities/entitydb';
 import { MatButton } from '@angular/material/button';
 import { ChangeDetectionStrategy } from '@angular/core';
 

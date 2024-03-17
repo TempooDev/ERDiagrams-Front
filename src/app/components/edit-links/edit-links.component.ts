@@ -4,8 +4,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RelationShip } from 'src/app/entities/relationship';
-import { BoardService } from 'src/app/services/board.service';
+import { RelationShip } from 'src/app/core/entities/relationship';
+import { BoardService } from 'src/app/core/services/board.service';
 
 @Component({
   selector: 'app-edit-links',
