@@ -30,7 +30,5 @@ export class HeaderComponent {
   _diagramService = inject(DiagramsService);
   _boardService = inject(BoardService);
 
-  ngOnInit() {
-    this._diagramService.getDiagrams();
-  }
+  ngOnInit() {}
 }
