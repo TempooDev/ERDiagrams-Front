@@ -23,7 +23,7 @@
     "@auth0/auth0-angular": "^2.1.0",
     "@microsoft/signalr": "^8.0.0",
     "gojs": "^2.3.7",
-    "gojs-angular": "^2.0.6",
+    "gojs-angular": "^2.0.7",
     "ng-angular-popup": "^0.5.2",
     "node": "^20.11.1",
     "rxjs": "~7.8.0",

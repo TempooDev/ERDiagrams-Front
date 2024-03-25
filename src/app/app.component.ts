@@ -3,27 +3,28 @@
  * For use with gojs-angular version 2.x
  */
 
-import { ChangeDetectorRef, Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import * as go from 'gojs';
-import { DataSyncService, DiagramComponent, PaletteComponent } from 'gojs-angular';
-import produce from "immer";
+import {
+  DataSyncService,
+  DiagramComponent,
+  PaletteComponent,
+} from 'gojs-angular';
+import produce from 'immer';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: true,
-    imports: [
-        HeaderComponent,
-        SidebarComponent,
-        RouterOutlet,
-    ],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [HeaderComponent, SidebarComponent, RouterOutlet],
 })
-export class AppComponent {
-
-
-
-}
+export class AppComponent {}

@@ -7,6 +7,21 @@
   <br />
 </ng-container>
 {{ roomName }}
+
+<ng-container *ngIf="vm$ | async as vm">
+  <gojs-diagram
+    #myDiagram
+    [initDiagram]="initDiagram"
+    [nodeDataArray]="state.diagramNodeData"
+    [linkDataArray]="state.diagramLinkData"
+    [divClassName]="diagramDivClassName"
+    [modelData]="state.diagramModelData"
+    [(skipsDiagramUpdate)]="state.skipsDiagramUpdate"
+    (modelChange)="diagramModelChange($event)"
+  >
+  </gojs-diagram>
+</ng-container>
+
 <!-- <div class="left">
   Palette
   <gojs-palette #myPalette [initPalette]='initPalette' [divClassName]='paletteDivClassName'
